@@ -1,4 +1,4 @@
 Pyternion
 =========
 
-![TravisCI Build Status](https://api.travis-ci.org/philip-peterson/pyternion.svg)
+[![Build Status](https://travis-ci.org/philip-peterson/pyternion.svg?branch=master)](https://travis-ci.org/philip-peterson/pyternion)
