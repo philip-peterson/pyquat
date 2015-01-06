@@ -7,4 +7,5 @@ setup(name='Pyternion',
       description='Pythonic Quaternion library including Euclidean geometry calculations',
       author='Philip Peterson',
       packages=['pyternion'],
+      setup_requires=['nose>=1.0']
 )

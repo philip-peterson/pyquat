@@ -79,7 +79,6 @@ class Quaternion(object):
 
    def __mul__(self, other):
       t = type(other)
-      print t
       if t == Quaternion:
          # quaternion * quaternion
          # Note: this is just the distributive law, taking
