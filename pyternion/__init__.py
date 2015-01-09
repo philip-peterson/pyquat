@@ -1,4 +1,32 @@
-from math import sqrt
+from math import sqrt, pi, asin, acos, sin, cos
+
+def normalize_vector(vec):
+   m = abs(Quaternion(0, *vec))
+   return tuple([m*comp for comp in vec])
+
+def yawpitch_from_normvector(vec):
+   x, y, z = vec
+   if abs(x) > abs(y):
+      largeXY = x
+   else:
+      largeXY = y
+
+   if largeXY == 0:
+      yaw = 0
+   else:
+      if largeXY == x:
+         yaw = acos(x)
+         if y < 0:
+            yaw += pi
+      else:
+         yaw = asin(y)
+         if x < 0:
+            yaw = pi-yaw
+
+   a = x*x+y*y
+   pitch = acos(a/sqrt(a))*(1 if z >= 0 else -1)
+
+   return (yaw, pitch)
 
 class Quaternion(object):
 
@@ -14,6 +42,24 @@ class Quaternion(object):
       self.x = x
       self.y = y
       self.z = z
+
+   @classmethod
+   def fromaxisangle(cls, vecAxis, angle):
+      return Quaternion(
+         cos(angle/2.0),
+         vecAxis[0]*sin(angle/2.0),
+         vecAxis[1]*sin(angle/2.0),
+         vecAxis[2]*sin(angle/2.0)
+      )
+
+   # TODO
+   # @classmethod
+   # def fromvectovec(cls, vecFrom, vecTo):
+   #    x, y, z = normalize_vector(vecFrom)
+   #    yaw1, pitch1 = yawpitch_from_normvector((x,y,z))
+   #    q1 = Quaternion.fromaxisangle((0,1,0), pitch1)
+   #    q2 = Quaternion.fromaxisangle((0,0,1), yaw1)
+   #    return q2*q1
    
    def conjugate(self):
       return Quaternion(
@@ -25,9 +71,9 @@ class Quaternion(object):
 
    def __abs__(self):
       return sqrt(
-         self.w * self.w,
-         self.x * self.x,
-         self.y * self.y,
+         self.w * self.w +
+         self.x * self.x +
+         self.y * self.y +
          self.z * self.z
       )
 
@@ -99,7 +145,8 @@ class Quaternion(object):
       elif t in (tuple, list) and len(other) == 3:
          # quaternion * vector
          equivalent_q = Quaternion(0, *other)
-         return self * equivalent_q * self.conjugate()
+         result_q = self * equivalent_q * self.conjugate()
+         return (result_q[1], result_q[2], result_q[3])
       else:
          raise TypeError('Quaternions cannot be multiplied by anything except real numbers and other quaternions')
 
