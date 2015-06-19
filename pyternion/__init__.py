@@ -1,4 +1,11 @@
 from math import sqrt, pi, asin, acos, sin, cos
+import sys
+
+if sys.version_info < (3,):
+   integer_types = (int, long)
+else:
+   integer_types = (int,)
+
 
 def normalize_vector(vec):
    m = abs(Quaternion(0, *vec))
@@ -84,7 +91,7 @@ class Quaternion(object):
       t = type(other)
       if t == Quaternion:
          return Quaternion(*[self[i]+other[i] for i in range(4)])
-      elif t in (float, int, complex):
+      elif t in (float, complex) or t in integer_types:
          other = complex(other)
          return Quaternion(real(other), imag(other), 0, 0) + self
       else:
@@ -149,7 +156,7 @@ class Quaternion(object):
             , self.w*other.y - self.x*other.z + self.y*other.w + self.z*other.x
             , self.w*other.z + self.x*other.y - self.y*other.x + self.z*other.w
          )
-      elif t in (float, complex, int, long):
+      elif t in (float, complex) or t in integer_types:
          # quaternion * scalar
          return Quaternion(*[comp*other for comp in self])
       elif t in (tuple, list) and len(other) == 3:
