@@ -83,7 +83,7 @@ class Quaternion(object):
    def __add__(self, other):
       t = type(other)
       if t == Quaternion:
-         return Quaternion(*[self[i]*other[i] for i in range(4)])
+         return Quaternion(*[self[i]+other[i] for i in range(4)])
       elif t in (float, int, complex):
          other = complex(other)
          return Quaternion(real(other), imag(other), 0, 0) + self
@@ -114,6 +114,13 @@ class Quaternion(object):
    def __getitem__(self, index):
       return (self.w, self.x, self.y, self.z)[index]
 
+   def __eq__(self, other):
+      return \
+         self.x == other.x and \
+         self.y == other.y and \
+         self.z == other.z and \
+         self.w == other.w
+
    def __iter__(self):
       yield self.w
       yield self.x
@@ -122,6 +129,9 @@ class Quaternion(object):
 
    def rank(self):
       return len([c for c in self if c != 0])
+
+   def __len__(self):
+      return 4
 
    def __mul__(self, other):
       t = type(other)
@@ -139,7 +149,7 @@ class Quaternion(object):
             , self.w*other.y - self.x*other.z + self.y*other.w + self.z*other.x
             , self.w*other.z + self.x*other.y - self.y*other.x + self.z*other.w
          )
-      elif t in (float, complex):
+      elif t in (float, complex, int, long):
          # quaternion * scalar
          return Quaternion(*[comp*other for comp in self])
       elif t in (tuple, list) and len(other) == 3:
