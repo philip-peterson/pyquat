@@ -56,7 +56,6 @@ def test_addition():
    a = Quaternion(1,2,3,4)
    b = Quaternion(2,3,4,5)
    sum = a+b
-   print sum
    assert eq4(sum, (3,5,7,9))
    
 def test_subtraction():
