@@ -58,15 +58,6 @@ class Quaternion(object):
          vecAxis[1]*sin(angle/2.0),
          vecAxis[2]*sin(angle/2.0)
       )
-
-   # TODO
-   # @classmethod
-   # def fromvectovec(cls, vecFrom, vecTo):
-   #    x, y, z = normalize_vector(vecFrom)
-   #    yaw1, pitch1 = yawpitch_from_normvector((x,y,z))
-   #    q1 = Quaternion.fromaxisangle((0,1,0), pitch1)
-   #    q2 = Quaternion.fromaxisangle((0,0,1), yaw1)
-   #    return q2*q1
    
    def conjugate(self):
       return Quaternion(
